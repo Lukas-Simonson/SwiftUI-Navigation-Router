@@ -13,6 +13,8 @@ final public class NavigationHandler: ObservableObject {
     
     @Published var navPath = NavigationPath()
     @Published private(set) var routerPath = [any NavigationLocation]()
+    
+    var popDisabled: Bool = false
 }
 
 // MARK: Information
@@ -36,6 +38,7 @@ public extension NavigationHandler {
     func pop(_ amount: Int = 1) {
         navPath.removeLast(amount)
         routerPath.removeLast(amount)
+        disablePop()
     }
     
     func safePop(_ amount: Int = 1) {
@@ -46,6 +49,12 @@ public extension NavigationHandler {
     func popToRoot() {
         navPath = NavigationPath()
         routerPath = []
+        disablePop()
+    }
+    
+    func disablePop() {
+        popDisabled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.popDisabled = false }
     }
 }
 
