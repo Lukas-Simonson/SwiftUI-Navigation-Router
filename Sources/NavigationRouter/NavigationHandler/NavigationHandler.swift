@@ -9,8 +9,6 @@ import SwiftUI
 
 final public class NavigationHandler: ObservableObject {
     
-    internal init() {}
-    
     @Published var navPath = NavigationPath()
     @Published private(set) var routerPath = [any NavigationLocation]()
     

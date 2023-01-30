@@ -12,6 +12,11 @@ public struct NavigationRouter<Content>: View where Content: View {
     @StateObject private var router = NavigationHandler()
     private var content: () -> Content
     
+    public init(router: NavigationHandler, content: @escaping () -> Content) {
+        self._router = StateObject(wrappedValue: router)
+        self.content = content
+    }
+    
     public init(content: @escaping () -> Content) {
         self.content = content
     }
