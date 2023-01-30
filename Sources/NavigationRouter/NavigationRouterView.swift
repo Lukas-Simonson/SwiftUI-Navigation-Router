@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct NavigationRouter<Content>: View where Content: View {
     
-    @StateObject private var router = NavigationController()
+    @StateObject private var router = NavigationHandler()
     private var content: () -> Content
     
     public init(content: @escaping () -> Content) {

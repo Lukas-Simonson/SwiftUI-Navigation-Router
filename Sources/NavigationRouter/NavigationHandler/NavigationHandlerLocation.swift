@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension NavigationController {
+public extension NavigationHandler {
     struct NavLocation<Content: View>: NavigationLocation {
         public let id = UUID()
         public let view: Content
@@ -15,8 +15,8 @@ public extension NavigationController {
     }
 }
 
-public extension NavigationController.NavLocation {
-    static func == (lhs: NavigationController.NavLocation<Content>, rhs: NavigationController.NavLocation<Content>) -> Bool {
+public extension NavigationHandler.NavLocation {
+    static func == (lhs: NavigationHandler.NavLocation<Content>, rhs: NavigationHandler.NavLocation<Content>) -> Bool {
         lhs.id == rhs.id
     }
 }

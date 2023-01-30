@@ -9,7 +9,7 @@ import SwiftUI
 
 public extension View {
     func navigatesTo<Content: View>(_ type: Content.Type) -> some View {
-        navigationDestination(for: NavigationController.NavLocation<Content>.self) { location in
+        navigationDestination(for: NavigationHandler.NavLocation<Content>.self) { location in
             location.view.modifier(NavigatesTo())
         }
     }

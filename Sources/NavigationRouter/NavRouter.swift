@@ -8,11 +8,11 @@
 import SwiftUI
 
 @propertyWrapper public struct NavRouter: DynamicProperty {
-    @EnvironmentObject public var router: NavigationController
+    @EnvironmentObject public var router: NavigationHandler
     
     public init() {}
     
-    public var wrappedValue: NavigationController {
+    public var wrappedValue: NavigationHandler {
         router
     }
 }
