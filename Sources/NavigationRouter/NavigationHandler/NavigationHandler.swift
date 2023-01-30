@@ -31,6 +31,14 @@ public extension NavigationHandler {
         navPath.append(location)
         routerPath.append(location)
     }
+    
+    func push(_ destinations: [some View]) {
+        for destination in destinations {
+            let location = NavLocation(view: destination)
+            navPath.append(location)
+            routerPath.append(location)
+        }
+    }
 }
 
 // MARK: Popping

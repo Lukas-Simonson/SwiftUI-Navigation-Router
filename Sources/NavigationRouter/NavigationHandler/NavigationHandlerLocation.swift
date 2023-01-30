@@ -11,7 +11,7 @@ public extension NavigationHandler {
     struct NavLocation<Content: View>: NavigationLocation {
         public let id = UUID()
         public let view: Content
-        public var userData: [String : Any]
+        public var userData: [String : Any] = [:]
     }
 }
 
