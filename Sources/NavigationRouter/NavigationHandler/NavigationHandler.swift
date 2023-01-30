@@ -12,6 +12,8 @@ final public class NavigationHandler: ObservableObject {
     @Published var navPath = NavigationPath()
     @Published private(set) var routerPath = [any NavigationLocation]()
     
+    public init() {}
+    
     var popDisabled: Bool = false
 }
 
