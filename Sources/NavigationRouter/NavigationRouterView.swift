@@ -12,6 +12,10 @@ public struct NavigationRouter<Content>: View where Content: View {
     @StateObject private var router = NavigationController()
     private var content: () -> Content
     
+    public init(content: @escaping () -> Content) {
+        self.content = content
+    }
+    
     public var body: some View {
         NavigationStack(path: $router.navPath) {
             rootView
