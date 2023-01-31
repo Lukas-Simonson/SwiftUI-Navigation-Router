@@ -7,10 +7,17 @@
 
 import Foundation
 
+/// A Protocol used to identify `Views` inside a `NavigationController`
 public protocol NavigationLocation: Hashable, Identifiable {
     associatedtype Content
+    
+    /// A Unique Identifier given this `NavigationLocation`
     var id: UUID { get }
+    
+    /// The `View` this `NavigationLocation` is used to wrap.
     var view: Content { get }
+    
+    /// A `Dictionary<String : Any>` uses to store extra identification data inside this `NavigationLocation`
     var userData: [String : Any] { get set }
 }
 

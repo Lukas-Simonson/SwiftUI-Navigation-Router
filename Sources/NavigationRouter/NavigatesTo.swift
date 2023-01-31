@@ -8,6 +8,12 @@
 import SwiftUI
 
 public extension View {
+    
+    /// Adds a `View` `Type` that can be navigated to into the current navigation route.
+    ///
+    /// - Parameters:
+    ///   - type: The `View` `Type` to add to the navigation routes potential locations.
+    ///   - usesBackButton: A `Bool` that dictates if this given `View` `Type` needs to use a toolbar back button, enabled by default.
     func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true) -> some View {
         navigationDestination(for: NavigationHandler.NavLocation<Content>.self) { location in
             location.view.modifier(NavigatesTo(backButton: usesBackButton))
@@ -15,6 +21,7 @@ public extension View {
     }
 }
 
+/// A `ViewModifier` given to all Views inside a `NavigationRouter`. Used to change some default functionality of a `NavigationStack`.
 private struct NavigatesTo: ViewModifier {
     
     @NavRouter var router
