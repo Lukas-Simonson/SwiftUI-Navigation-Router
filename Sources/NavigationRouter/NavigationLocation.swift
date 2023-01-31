@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol NavigationLocation: Hashable {
+public protocol NavigationLocation: Hashable, Identifiable {
     associatedtype Content
     var id: UUID { get }
     var view: Content { get }
