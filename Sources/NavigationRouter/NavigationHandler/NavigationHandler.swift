@@ -52,6 +52,13 @@ public extension NavigationHandler {
         navPath.append(location)
         routerPath.append(location)
     }
+    
+    func push(_ views: [any View]) {
+        for view in views {
+            let anyView = AnyView(view)
+            print( type(of: anyView) )
+        }
+    }
 }
 
 // MARK: Popping
