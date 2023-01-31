@@ -7,7 +7,10 @@
 
 import SwiftUI
 
+/// A `PropertyWrapper` used to access the `NavigationHandler` of the current navigation route.
 @propertyWrapper public struct NavRouter: DynamicProperty {
+    
+    /// The `NavigationHandler` recieved from a `NavigationRouter`
     @EnvironmentObject public var router: NavigationHandler
     
     public init() {}
