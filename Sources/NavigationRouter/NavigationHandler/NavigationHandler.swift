@@ -65,6 +65,12 @@ public extension NavigationHandler {
         pop((count - 1) - index)
     }
     
+    func popTo(_ location: any NavigationLocation) {
+        guard let index = routerPath.lastIndex(where: { $0.id == location.id })
+        else { return }
+        pop((count - 1) - index)
+    }
+    
     func popToView(where predicate: (any NavigationLocation) -> Bool ) {
         guard let index = routerPath.lastIndex(where: predicate)
         else { return }
