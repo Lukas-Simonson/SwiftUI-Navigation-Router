@@ -10,7 +10,7 @@ import SwiftUI
 final public class NavigationHandler: ObservableObject {
     
     @Published var navPath = NavigationPath()
-    @Published private(set) var routerPath = [any NavigationLocation]()
+    @Published private var routerPath = [any NavigationLocation]()
     
     public init() {}
     
@@ -22,6 +22,7 @@ public extension NavigationHandler {
     var count: Int { routerPath.count }
     var isEmpty: Bool { routerPath.isEmpty }
     var isNotEmpty: Bool { !routerPath.isEmpty }
+    var pathHistory: [any NavigationLocation] { routerPath }
 }
 
 // MARK: Pushing
