@@ -55,9 +55,9 @@ public extension NavigationHandler {
     
     func push(_ views: [any View]) {
         for view in views {
-//            let anyView = AnyView(view)
-//            print( type(of: anyView) )
-            print(type(of: view))
+            let type = "\(type(of: view))"
+            let nav = NavLocation(view: AnyView(view), userData: ["viewType" : type])
+            print( nav.userData["viewType"] as! String == "\(type)" )
         }
     }
 }
