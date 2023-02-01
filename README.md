@@ -14,7 +14,7 @@ To add [SwiftUI-Navigation-Router](https://github.com/Lukas-Simonson/SwiftUI-Nav
 - When prompted for a Version or a Branch, we suggest you use the branch: main
   - If you need, or want to try some experimental features, you can use the branch: dev
 
-## Usage
+## Quickstart Guide
 
 ### Adding the Navigation Router
 
@@ -67,7 +67,7 @@ Once you have added the `NavigationRouter` and added your `Navigatable Views`. Y
 
 #### Using PushView
 
-Using a `PushView` is the easiest way to navigate forward. Inside any file that you need to navigate it import `NavigationRouter`, and then its as easy as using a `NavigationLink`. `PushView` can be made either with a `String`, or a custom label `View`.
+Using a `PushView` is the easiest way to navigate forward. Inside any file that you need to navigate in import `NavigationRouter`, and then its as easy as using a `NavigationLink`. `PushView` can be made either with a `String`, or a custom label `View`.
 
 <sub>NOTE: `PushView` functions as a `Button` similar to `NavigationLink`</sub>
 
@@ -82,7 +82,7 @@ struct ViewOne: View {
             
             // Using a Custom Label for its View.
             PushView(ViewTwo()) {
-                // Custom Label View
+                // Custom Label View.
                 Image("MyNavigationImage")
             }
         }
@@ -124,21 +124,98 @@ router.push(ViewTwo(), with: ["name" : "View Two", "totalViews" : 6])
  
 ### Navigating Backwards / Popping Views
  
- Simple backwards navigation functions in the same way as pushing a view, just instead of using the `push` function, you can use the `pop` function. Throw it inside a button or just any function and youre golden, something like the following:
- 
+SwiftUIs `NavigationStack` offers very limited backwards navigation. You can go back once, a set number of times, or to the root. But navigation isn't always that simple. Often you might not know exactly how many times you need to go back, or you want to go back to a specific view, or maybe offer users a way to see all the different places they can navigate back to. This is where SwiftUI-Navigation-Router comes in. The `Router` offers many ways to navigate backwards, both programatically and/or using a `PopView`. 
+
+Examples of ways you can navigate back that arent included in SwiftUIs `NavigationStack` by default include:
+
+- Pop to a specific point in the route specified by an index.
+- Pop back a set number of `Views`, safely returning to the root `View` if you try and navigate too far back.
+- Pop back to the last `View` matching a given type of `View`.
+- Retrieve an `Array` of different Locations to navigate to, and navigate back to them easily.
+- Navigate back to a specific `View` matching a given predicate.
+
+All of the above can be completed, including whats already a part of SwiftUIs `NavigationStack`, using a `PopView` or programatically using a `Router`.
+
+#### Using PopView
+
+Using a `PopView` is the easiest way to navigate backwards. Inside any file that you need to navigate back from import `NavigationRouter`, and then it's as easy as using a `NavigationLink`. `PopView` can be made either with a `String`, or a custom label `View`.
+
+<sub>NOTE: `PopView` functions as a `Button` similar to `NavigationLink`</sub>
+
 ```swift
-var body: some View {
-    Button("Navigate Back A View") {
-        router.pop()
+struct ViewTwo: View {
+    var body: some View {
+        VStack {
+            // Using a Text for its View.
+            PopView("Go Back One View")
+            
+            // Or
+            
+            // Using a Custom Label for its View.
+            PopView {
+                // Custom Label View.
+                Image("BackOneViewImage")
+            }
+        }
     }
 }
 ```
 
-Pop also can take a parameter for how many views you want to navigate back. You can use it like so
+`PopView` also supports navigating back multiple levels, you can just specify the amount you want to go back.
 
 ```swift
-// Navigate Back 2 Views
-router.pop(2)
+PopView("Go Back Two Views", amount: 2)
+
+// or
+
+PopView(2) {
+    Image("BackTwoViewsImage")
+}
 ```
 
-There are several different pop functions, all of which have documentation in Xcode, and at somepoint there will be a Wiki that will cover them more. So feel free to look through the documentation and see it all!
+Finally `PopView` also supports all of the advanced navigation mentioned above. By replacing amount with a `PopType`. There will be a full description of these different `PopTypes` in the wiki. But here is an example on how to implement it to return to the root view.
+
+```swift
+PopView("Back To Root", popType: .root)
+
+// or
+
+PopView(.root) {
+    Image("BackToRootImage")
+}
+```
+
+#### Using Programatic Backward Navigation
+
+Programatically navigating around with Navigation Router is almost as easy as using a `PopView`. We just have one extra step. We need to manuall get access to our `Router`. We can do that by using the `@NavRouter` property wrapper.
+
+```swift
+ struct ViewTwo: View {
+     
+     // You can name this variable whatever, router is what we will use for these examples.
+     @NavRouter var router
+     
+     var body: some View {
+         // View Body...
+     }
+ }
+ ```
+ 
+Now that we have access to our `Router` we can use it to navigate around. To pop a view you just need to call one of the `pop` functions. Typically you may want to do this in a `Button` or an `onTapGesture`; however, you can call it from wherever you need as long as you have access to the `Router`.
+
+```swift
+ var body: some View {
+     Button("Navigate Back One View") {
+         router.pop()
+     }
+ }
+ ```
+ 
+ You can also specify that you want to navigate multiple `Views` back by passing the number into the `pop` function.
+ 
+ ```swift
+ // Pops Back 2 Views
+ router.pop(2)
+ ```
+ 
+Similar to the PopView there is access to all of those advanced navigation methods mentioned above. And you can either find those in the App documentation or the Wiki when its up.
