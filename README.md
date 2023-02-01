@@ -63,20 +63,41 @@ HomeView()
 
 ### Navigating Forward / Pushing Views
 
-Once you have added the NavigationRouter and added your Navigatable Views. You can start actually navigating! Pushing a View is very easy and can be done in 3 steps.
+Once you have added the `NavigationRouter` and added your `Navigatable Views`. You can start to navigate. Navigation Forwards / Pushing a View is super easy! You can either use a `PushView`, or gain access to the `Router` using the `@NavRouter` property wrapper, and then call the `push` function.
 
-  - Gain access to the Router using the @NavRouter property wrapper
-  - Make a `Button` that can call the navigation function or use an `onTapGesture` on an existing View.
-  - Call the `push` function from the router.
-  
-Inside the Views that you need to navigate from go ahead an import `NavigationRouter`, and then we need to add a NavRouter property wrapper inside. It should look something like this.
+#### Using PushView
+
+Using a `PushView` is the easiest way to navigate forward. Inside any file that you need to navigate it import `NavigationRouter`, and then its as easy as using a `NavigationLink`. `PushView` can be made either with a `String`, or a custom label `View`.
+
+<sub>NOTE: `PushView` functions as a `Button` similar to `NavigationLink`</sub>
 
 ```swift
-import NavigationRouter
+struct ViewOne: View {
+    var body: some View {
+        VStack {
+            // Using a Text for its View.
+            PushView("Navigate to View Two", destination: ViewTwo())
+            
+            // Or
+            
+            // Using a Custom Label for its View.
+            PushView(ViewTwo()) {
+                // Custom Label View
+                Image("MyNavigationImage")
+            }
+        }
+    }
+}
+```
 
-struct HomeView: View {
+#### Using Programatic Forward Navigation
+
+Programatically navigating around with Navigation Router is almost as easy as using a `PushView`. We just have one extra step. We need to manually get access to our `Router`. We can do that by using the `@NavRouter` property wrapper.
+
+```swift
+struct ViewOne: View {
     
-    // You can name this variable whatever, router is what we will use for these examples
+    // You can name this variable whatever, router is what we will use for these examples.
     @NavRouter var router
     
     var body: some View {
@@ -85,7 +106,7 @@ struct HomeView: View {
 }
 ```
 
-Step one complete, now that we have access to our NavRouter we can use it to navigate. We can use the `push` function in order to do that. We can just call that function in any block, for example with a button:
+Now that we have access to our `Router` we can use it to navigate around. To push a view its as easy as calling the `push` function. Typically you may do this inside of a `Button` or an `onTapGesture`; however, you can call it from wherever you need to, thats the beauty of using programatic navigation.
 
 ```swift
 var body: some View {
@@ -94,16 +115,14 @@ var body: some View {
     }
 }
 ```
+
+When using programatic navigation we can use an additional parameter of the `push` function. This parameters is a `[String : Any]` Dictionary. This lets you tie some additional information to your `View` for specific purposes.
+
+```swift
+router.push(ViewTwo(), with: ["name" : "View Two", "totalViews" : 6])
+```
  
- And there is step two and step three completed.
- 
- The `push` function also has an additional parameter that can be used. This parameter is a `[String : Any]` Dictionary. This lets you tie some additional information to your View for specific purposes. You can call it like this.
- 
- ```swift
- router.push(ViewTwo(), with: ["name" : "View Two"])
- ```
- 
- ### Navigating Backwards / Popping Views
+### Navigating Backwards / Popping Views
  
  Simple backwards navigation functions in the same way as pushing a view, just instead of using the `push` function, you can use the `pop` function. Throw it inside a button or just any function and youre golden, something like the following:
  
