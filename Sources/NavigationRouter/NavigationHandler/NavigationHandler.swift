@@ -56,15 +56,10 @@ public extension NavigationHandler {
     func push(_ views: [any View]) {
         for view in views {
             var nav = NavLocation(view: AnyView(view))
-            nav.userData["specializedViewType"] = getGenericType(view)
+            nav.userData["specializedViewType"] = "\(type(of: view))"
             routerPath.append(nav)
             navPath.append(nav)
         }
-    }
-    
-    func getGenericType<T>(_ value: T) -> String {
-        let t = type(of: value)
-        return "\(t)"
     }
 }
 
@@ -112,7 +107,7 @@ public extension NavigationHandler {
         
         guard let index = routerPath.lastIndex(where: { navLoc in
             if navLoc.view is AnyView {
-                return getGenericType(navLoc.view) == navLoc.userData["specializedViewType"] as? String
+                return "\(last)" == navLoc.userData["specializedViewType"] as? String
             } else {
                 return type(of: navLoc.view) == last
             }
