@@ -58,6 +58,7 @@ extension PushView where Label == Text {
     /// - Parameters:
     ///   - title: A `String` that describes where this `PushView` navigates to.
     ///   - destination: A `View` to navigate to when the suer triggers this `PushView`
+    ///
     public init<SomeString : StringProtocol>(_ title: SomeString, destination: Destination) {
         self.destination = destination
         self.label = Text(title)
