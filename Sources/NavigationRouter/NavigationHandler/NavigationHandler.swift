@@ -55,25 +55,10 @@ public extension NavigationHandler {
     
     func push(_ views: [any View]) {
         for view in views {
-            let type = "\(type(of: view))"
             var nav = NavLocation(view: AnyView(view))
             nav.userData["specializedViewType"] = getGenericType(nav)
-//            navPath.append(nav)
             routerPath.append(nav)
-            
-            for loc in routerPath {
-                if loc.view is AnyView {
-                    print("AnyView")
-                    print("Result: \(getGenericType(nav) == loc.userData["specializedViewType"] as! String)")
-                } else {
-                    print("Not Any View")
-                }
-                
-            }
-            
-//            print( nav.view is AnyView )
-//            let locations: [any NavLocation] = [nav]
-//            print( nav.userData["viewType"] as! String == "\(type)" )
+            navPath.append(nav)
         }
     }
     

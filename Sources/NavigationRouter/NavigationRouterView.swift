@@ -39,6 +39,7 @@ public struct NavigationRouter<Content>: View where Content: View {
     public var body: some View {
         NavigationStack(path: $router.navPath) {
             rootView
+                .navigatesTo(AnyView.self)
         }
         .environmentObject(router)
         .gesture(navSwipeBackGesture)
