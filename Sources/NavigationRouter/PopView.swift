@@ -29,7 +29,7 @@ public struct PopView<Label : View> : View {
     ///   - amount: The number of `Views` to remove from the current Navigation Route.
     ///   - label: A `View` that describes where this butotn will navigate to.
     ///
-    public init(_ amount: Int, @ViewBuilder label: () -> Label) {
+    public init(_ amount: Int = 1, @ViewBuilder label: () -> Label) {
         self.label = label()
         self.pop = { $0.pop(amount) }
     }
@@ -77,7 +77,7 @@ extension PopView where Label == Text {
     ///   - titleKey: The key for this `PopView's` localized title, that describes what this `PopView` does.
     ///   - amount: The number of `Views` to remove from the current Navigation Route.
     ///
-    public init(_ titleKey: LocalizedStringKey, amount: Int) {
+    public init(_ titleKey: LocalizedStringKey, amount: Int = 1) {
         self.label = Text(titleKey)
         self.pop = { $0.pop(amount) }
     }
@@ -88,7 +88,7 @@ extension PopView where Label == Text {
     ///   - title: A `String` that describes what this `PopView` does.
     ///   - amount: The number of `Views` to remove from the current Navigation Route.
     ///
-    public init<SomeString : StringProtocol>(_ title: SomeString, amount: Int) {
+    public init<SomeString : StringProtocol>(_ title: SomeString, amount: Int = 1) {
         self.label = Text(title)
         self.pop = { $0.pop(amount) }
     }
@@ -99,7 +99,7 @@ extension PopView where Label == Text {
     ///   - titleKey: The key for this `PopView's` localized title, that describes what this `PopView` does.
     ///   - popType: The way this `PopView` will navigate backwards.
     ///
-    public init(_ titleKey: LocalizedStringKey, popType: PopType) {
+    public init(_ titleKey: LocalizedStringKey, popType: PopType = .pop(amount: 1)) {
         self.label = Text(titleKey)
         
         switch popType {
@@ -119,7 +119,7 @@ extension PopView where Label == Text {
     ///   - title: A `String` that describes what this `PopView` does.
     ///   - popType: The way this `PopView` will navigate backwards.
     ///
-    public init<SomeString : StringProtocol>(_ title: SomeString, popType: PopType) {
+    public init<SomeString : StringProtocol>(_ title: SomeString, popType: PopType = .pop(amount: 1)) {
         self.label = Text(title)
         
         switch popType {
