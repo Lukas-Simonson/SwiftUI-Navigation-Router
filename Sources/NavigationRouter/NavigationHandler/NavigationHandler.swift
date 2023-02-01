@@ -64,7 +64,7 @@ public extension NavigationHandler {
             for loc in routerPath {
                 if loc.view is AnyView {
                     print("AnyView")
-                    print("Result: \(getGenericType(nav) == getGenericType(loc))")
+                    print("Result: \(getGenericType(nav) == loc.userData["specializedViewType"] as! String)")
                 } else {
                     print("Not Any View")
                 }
@@ -73,7 +73,7 @@ public extension NavigationHandler {
             
 //            print( nav.view is AnyView )
 //            let locations: [any NavLocation] = [nav]
-            print( nav.userData["viewType"] as! String == "\(type)" )
+//            print( nav.userData["viewType"] as! String == "\(type)" )
         }
     }
     
