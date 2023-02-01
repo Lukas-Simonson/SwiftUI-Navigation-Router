@@ -102,6 +102,7 @@ public extension NavigationHandler {
     ///   - last: The `View's` `Type` that you want to navigate back to.
     ///
     func popTo<Content: View>(_ last: Content.Type) {
+
         guard let index = routerPath.lastIndex(where: { navLoc in
             if navLoc.view is AnyView {
                 return "\(last)" == navLoc.userData["pushViews-AnyView-String-Type"] as? String
@@ -109,6 +110,7 @@ public extension NavigationHandler {
                 return type(of: navLoc.view) == last
             }
         })
+
         else { return }
         
         pop((count - 1) - index)
