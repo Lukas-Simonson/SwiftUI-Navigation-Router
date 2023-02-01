@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// A `Button` that removes a `View` to the current Navigation Route.
-public struct PopView<Label : View, Destination : View> : View {
+public struct PopView<Label : View> : View {
     
     /// Gives access to the current Navigation Route.
     @NavRouter private var router
