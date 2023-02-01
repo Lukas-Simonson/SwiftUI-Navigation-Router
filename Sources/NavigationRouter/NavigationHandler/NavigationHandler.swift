@@ -56,7 +56,7 @@ public extension NavigationHandler {
     func push(_ views: [any View]) {
         for view in views {
             var nav = NavLocation(view: AnyView(view))
-            nav.userData["specializedViewType"] = "\(type(of: view))"
+            nav.userData["pushViews-AnyView-String-Type"] = "\(type(of: view))"
             routerPath.append(nav)
             navPath.append(nav)
         }
@@ -102,18 +102,14 @@ public extension NavigationHandler {
     ///   - last: The `View's` `Type` that you want to navigate back to.
     ///
     func popTo<Content: View>(_ last: Content.Type) {
-//        guard let index = routerPath.lastIndex(where: { type(of: $0) == last })
-//        else { return }
-        
         guard let index = routerPath.lastIndex(where: { navLoc in
             if navLoc.view is AnyView {
-                return "\(last)" == navLoc.userData["specializedViewType"] as? String
+                return "\(last)" == navLoc.userData["pushViews-AnyView-String-Type"] as? String
             } else {
                 return type(of: navLoc.view) == last
             }
         })
         else { return }
-        
         
         pop((count - 1) - index)
     }
