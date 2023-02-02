@@ -138,23 +138,31 @@ public extension NavigationHandler {
 // MARK: User Data
 public extension NavigationHandler {
     
-    func updateUserData(at index: Int, with data: [String : Any]) {
-        routerPath[index].userData.merge(data, uniquingKeysWith: { _, newData in newData })
+    func updateUserData(at index: Int, with data: [String : Any?]) {
+        var userData = routerPath[index].userData
+        data.forEach { key, value in
+            if let value = value {
+                userData[key] = value
+            } else {
+                userData.removeValue(forKey: key)
+            }
+        }
+        routerPath[index].userData = userData
     }
     
-    func updateUserData<Content: View>(in last: Content.Type, with data: [String : Any]) {
+    func updateUserData<Content: View>(in last: Content.Type, with data: [String : Any?]) {
         guard let index = routerPath.lastIndex(where: { type(of: $0.view) == last })
         else { return }
         updateUserData(at: index, with: data)
     }
     
-    func updateUserData(at matching: some NavigationLocation, with data: [String : Any]) {
+    func updateUserData(at matching: some NavigationLocation, with data: [String : Any?]) {
         guard let index = routerPath.lastIndex(where: { $0.id == matching.id })
         else { return }
         updateUserData(at: index, with: data)
     }
     
-    func updateUserData(with data: [String : Any], at lastMatchingPredicate: (any NavigationLocation) -> Bool ) {
+    func updateUserData(with data: [String : Any?], at lastMatchingPredicate: (any NavigationLocation) -> Bool ) {
         guard let index = routerPath.lastIndex(where: lastMatchingPredicate)
         else { return }
         updateUserData(at: index, with: data)
