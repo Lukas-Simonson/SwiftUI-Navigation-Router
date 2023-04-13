@@ -1,5 +1,5 @@
 # NavigationRouter
-An alternative for SwiftUI NavigationStack. While using the NavigationStack for performance, NavigationRouter gives more control to navigating. It also gives easy access for programatic navigation.
+An alternative for SwiftUI NavigationStack. While using the NavigationStack for performance, NavigationRouter gives more control to navigating. It also gives easy access for programatic navigation. NavigationRouter is type-safe and avoids using AnyView to make it as performant as possible. 
 
 ## Installation
 
