@@ -15,6 +15,7 @@ public extension View {
     ///   - type: The `View` `Type` to add to the navigation routes potential locations.
     ///   - usesBackButton: A `Bool` that dictates if this given `View` `Type` needs to use a toolbar back button, enabled by default.
     func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true) -> some View {
+    func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true, usesBackSwipe: Bool = true) -> some View {
         navigationDestination(for: NavigationHandler.NavLocation<Content>.self) { location in
             location.view.modifier(NavigatesTo(backButton: usesBackButton))
         }
@@ -30,6 +31,13 @@ private struct NavigatesTo: ViewModifier {
     func body(content: Content) -> some View {
         if backButton { usesToolbar(content: content) }
         else { noToolbar(content: content) }
+                .gesture(!backSwipe ? DragGesture() : nil)
+        }
+        else {
+            noToolbar(content: content)
+                .modifier(OptionalTitle(title: title))
+                .gesture(!backSwipe ? DragGesture() : nil)
+        }
     }
     
     func noToolbar(content: Content) -> some View {
