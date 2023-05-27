@@ -40,7 +40,7 @@ public struct PopView<Label : View> : View {
     ///   - popType: The way this `PopView` will navigate backwards.
     ///   - label: A `View` that describes where this butotn will navigate to.
     ///
-    public init(_ popType: PopType = .pop(amount: 1), @ViewBuilder label: () -> Label) {
+    public init(_ popType: PopType, @ViewBuilder label: () -> Label) {
         self.label = label()
         
         switch popType {
@@ -99,7 +99,7 @@ extension PopView where Label == Text {
     ///   - titleKey: The key for this `PopView's` localized title, that describes what this `PopView` does.
     ///   - popType: The way this `PopView` will navigate backwards.
     ///
-    public init(_ titleKey: LocalizedStringKey, popType: PopType = .pop(amount: 1)) {
+    public init(_ titleKey: LocalizedStringKey, popType: PopType) {
         self.label = Text(titleKey)
         
         switch popType {
@@ -119,7 +119,7 @@ extension PopView where Label == Text {
     ///   - title: A `String` that describes what this `PopView` does.
     ///   - popType: The way this `PopView` will navigate backwards.
     ///
-    public init<SomeString : StringProtocol>(_ title: SomeString, popType: PopType = .pop(amount: 1)) {
+    public init<SomeString : StringProtocol>(_ title: SomeString, popType: PopType) {
         self.label = Text(title)
         
         switch popType {

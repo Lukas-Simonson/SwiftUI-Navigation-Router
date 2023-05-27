@@ -14,9 +14,9 @@ public extension View {
     /// - Parameters:
     ///   - type: The `View` `Type` to add to the navigation routes potential locations.
     ///   - usesBackButton: A `Bool` that dictates if this given `View` `Type` needs to use a toolbar back button, enabled by default.
-    func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true) -> some View {
+    func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true, usesBackSwipe: Bool = true) -> some View {
         navigationDestination(for: NavigationHandler.NavLocation<Content>.self) { location in
-            location.view.modifier(NavigatesTo(backButton: usesBackButton))
+            location.view.modifier(NavigatesTo(backButton: usesBackButton, backSwipe: usesBackSwipe, title: location.userData["name"] as? String))
         }
     }
 }
@@ -26,10 +26,20 @@ private struct NavigatesTo: ViewModifier {
     
     @NavRouter var router
     var backButton: Bool
+    var backSwipe: Bool
+    var title: String?
     
     func body(content: Content) -> some View {
-        if backButton { usesToolbar(content: content) }
-        else { noToolbar(content: content) }
+        if backButton {
+            usesToolbar(content: content)
+                .modifier(OptionalTitle(title: title))
+                .gesture(!backSwipe ? DragGesture() : nil)
+        }
+        else {
+            noToolbar(content: content)
+                .modifier(OptionalTitle(title: title))
+                .gesture(!backSwipe ? DragGesture() : nil)
+        }
     }
     
     func noToolbar(content: Content) -> some View {
@@ -61,4 +71,17 @@ private struct NavigatesTo: ViewModifier {
             }
     }
     
+    struct OptionalTitle: ViewModifier {
+        
+        var title: String?
+        
+        func body(content: Content) -> some View {
+            if let title = title {
+                content
+                    .navigationTitle(title)
+            } else {
+                content
+            }
+        }
+    }
 }
