@@ -73,6 +73,7 @@ public extension NavigationHandler {
     ///
     /// - Parameters:
     ///   - amount: The number of `Views` to go back, defaults to 1.
+    ///
     func safePop(_ amount: Int = 1) {
         if count > amount { pop(amount) }
         else { popToRoot() }
@@ -129,6 +130,8 @@ public extension NavigationHandler {
     }
     
     /// Disables the functions the Pop / Remove Views from the current navigation route. Re-enables the navigation after a short delay.
+    ///
+    /// This is a required piece of functionality, as currently navigation will break when trying to do multiple 'pop' operations.
     private func disablePop() {
         popDisabled = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.popDisabled = false }
