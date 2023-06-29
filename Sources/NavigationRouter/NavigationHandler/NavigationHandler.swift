@@ -20,6 +20,8 @@ final public class NavigationHandler: ObservableObject {
     
     /// Used to keep an enduser from navigating backwards faster than a `NavigationStack` can handle.
     private var popDisabled: Bool = false
+    
+    public var popDisableDuration: Double = 0.75
 }
 
 // MARK: Information
@@ -134,7 +136,7 @@ public extension NavigationHandler {
     /// This is a required piece of functionality, as currently navigation will break when trying to do multiple 'pop' operations.
     private func disablePop() {
         popDisabled = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.popDisabled = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + popDisableDuration) { [weak self] in self?.popDisabled = false }
     }
 }
 
