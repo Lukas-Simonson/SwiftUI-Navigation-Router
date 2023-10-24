@@ -20,6 +20,8 @@ final public class NavigationHandler: ObservableObject {
     
     /// Used to keep an enduser from navigating backwards faster than a `NavigationStack` can handle.
     private var popDisabled: Bool = false
+    
+    public var popDisableDuration: Double = 0.75
 }
 
 // MARK: Information
@@ -73,6 +75,7 @@ public extension NavigationHandler {
     ///
     /// - Parameters:
     ///   - amount: The number of `Views` to go back, defaults to 1.
+    ///
     func safePop(_ amount: Int = 1) {
         if count > amount { pop(amount) }
         else { popToRoot() }
@@ -129,10 +132,68 @@ public extension NavigationHandler {
     }
     
     /// Disables the functions the Pop / Remove Views from the current navigation route. Re-enables the navigation after a short delay.
+    ///
+    /// This is a required piece of functionality, as currently navigation will break when trying to do multiple 'pop' operations.
     private func disablePop() {
         popDisabled = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in self?.popDisabled = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + popDisableDuration) { [weak self] in self?.popDisabled = false }
     }
 }
 
-
+// MARK: User Data
+public extension NavigationHandler {
+    
+    /// Updates the userData tied to the `View` at the given index.
+    ///
+    /// - Parameters:
+    ///   - index: The index of the `View` that needs the updated userData.
+    ///   - data: A `[String : Any]` Dictionary containing updated information for the `View`.
+    ///
+    func updateUserData(at index: Int, with data: [String : Any?]) {
+        var userData = routerPath[index].userData
+        data.forEach { key, value in
+            if let value = value {
+                userData[key] = value
+            } else {
+                userData.removeValue(forKey: key)
+            }
+        }
+        routerPath[index].userData = userData
+    }
+    
+    /// Updates the userData tied to the `View` at the given index.
+    ///
+    /// - Parameters:
+    ///   - last: The type of `View` that needs the updated userData.
+    ///   - data: A `[String : Any]` Dictionary containing updated information for the `View`.
+    ///
+    func updateUserData<Content: View>(in last: Content.Type, with data: [String : Any?]) {
+        guard let index = routerPath.lastIndex(where: { type(of: $0.view) == last })
+        else { return }
+        updateUserData(at: index, with: data)
+    }
+    
+    /// Updates the userData tied to the `View` at the given index.
+    ///
+    /// - Parameters:
+    ///   - matching: A `NavigationLocation` from the current route, which needs to be updated with the new userData.
+    ///   - data: A `[String : Any]` Dictionary containing updated information for the `View`.
+    ///
+    func updateUserData(at matching: some NavigationLocation, with data: [String : Any?]) {
+        guard let index = routerPath.lastIndex(where: { $0.id == matching.id })
+        else { return }
+        updateUserData(at: index, with: data)
+    }
+    
+    /// Updates the userData tied to the `View` at the given index.
+    ///
+    /// - Parameters:
+    ///   - data: A `[String : Any]` Dictionary containing updated information for the `View`.
+    ///   - lastMatchingPredicate: A `(NavigationLocation) -> Bool` predicate used to find the `View` that needs the updated userData.
+    ///
+    func updateUserData(with data: [String : Any?], at lastMatchingPredicate: (any NavigationLocation) -> Bool ) {
+        guard let index = routerPath.lastIndex(where: lastMatchingPredicate)
+        else { return }
+        updateUserData(at: index, with: data)
+    }
+}

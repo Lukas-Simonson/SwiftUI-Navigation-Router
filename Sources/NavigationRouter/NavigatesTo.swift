@@ -13,41 +13,54 @@ public extension View {
     ///
     /// - Parameters:
     ///   - type: The `View` `Type` to add to the navigation routes potential locations.
-    ///   - usesBackButton: A `Bool` that dictates if this given `View` `Type` needs to use a toolbar back button, enabled by default.
-    func navigatesTo<Content: View>(_ type: Content.Type, usesBackButton: Bool = true, usesBackSwipe: Bool = true) -> some View {
+    ///   - backButtonDisabled: A `Bool` that dictates if this given `View` destination needs to use a toolbar back button, enabled by default.
+    ///   - backSwipeDisabled: A `Bool` that dictates if this given `View` destination uses the swipe to go back feature, enabled by default.
+    ///   - titleDisabled: A `Bool` that dicated if this given `View` destination should display a title.
+    ///
+    func navigatesTo<Content: View>(
+        _ type: Content.Type,
+        backButtonDisabled: Bool = false,
+        backSwipeDisabled: Bool = false,
+        titleDisabled: Bool = false
+    ) -> some View {
         navigationDestination(for: NavigationHandler.NavLocation<Content>.self) { location in
-            location.view.modifier(NavigatesTo(backButton: usesBackButton, backSwipe: usesBackSwipe, title: location.userData["name"] as? String))
+            location.view.modifier(NavigatesTo(
+                backButtonDisabled: backButtonDisabled,
+                backSwipeDisabled: backSwipeDisabled,
+                title: titleDisabled ? nil : location.userData["name"] as? String
+            ))
         }
     }
 }
 
-/// A `ViewModifier` given to all Views inside a `NavigationRouter`. Used to change some default functionality of a `NavigationStack`.
+/// A `ViewModifier` that adds a destination `View` to the parent `NavigationRouter`.
 private struct NavigatesTo: ViewModifier {
     
     @NavRouter var router
-    var backButton: Bool
-    var backSwipe: Bool
+    var backButtonDisabled: Bool
+    var backSwipeDisabled: Bool
     var title: String?
     
     func body(content: Content) -> some View {
-        if backButton {
-            usesToolbar(content: content)
-                .modifier(OptionalTitle(title: title))
-                .gesture(!backSwipe ? DragGesture() : nil)
-        }
-        else {
+
+        if backButtonDisabled {
             noToolbar(content: content)
                 .modifier(OptionalTitle(title: title))
-                .gesture(!backSwipe ? DragGesture() : nil)
+                .gesture(backSwipeDisabled ? DragGesture() : nil)
+        }
+        else {
+            usesToolbar(content: content)
+                .modifier(OptionalTitle(title: title))
+                .gesture(backSwipeDisabled ? DragGesture() : nil)
         }
     }
     
-    func noToolbar(content: Content) -> some View {
+    private func noToolbar(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
     }
-    
-    func usesToolbar(content: Content) -> some View {
+
+    private func usesToolbar(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden()
             .toolbar {
@@ -71,7 +84,7 @@ private struct NavigatesTo: ViewModifier {
             }
     }
     
-    struct OptionalTitle: ViewModifier {
+    private struct OptionalTitle: ViewModifier {
         
         var title: String?
         
