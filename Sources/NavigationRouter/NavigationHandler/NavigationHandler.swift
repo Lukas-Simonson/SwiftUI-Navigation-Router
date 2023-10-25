@@ -53,6 +53,7 @@ public extension NavigationHandler {
         let location = NavLocation(view: view, userData: data)
         navPath.append(location)
         routerPath.append(location)
+        disablePop()
     }
 }
 
