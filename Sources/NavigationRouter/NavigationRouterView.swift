@@ -11,7 +11,7 @@ import SwiftUI
 public struct NavigationRouter<Content>: View where Content: View {
     
     /// The `NavigationHandler` that dictates what this `NavigationRouter` shows.
-    @StateObject private var router = NavigationHandler()
+    @State private var router = NavigationHandler()
     
     /// The root `View` of this `NavigationRouter`
     private var root: () -> Content
@@ -23,7 +23,7 @@ public struct NavigationRouter<Content>: View where Content: View {
     ///   - root: A `View` to display as the base `View` of this `NavigationRouter`.
     ///
     public init(router: NavigationHandler, root: @escaping () -> Content) {
-        self._router = StateObject(wrappedValue: router)
+        self.router = router
         self.root = root
     }
     
@@ -40,7 +40,7 @@ public struct NavigationRouter<Content>: View where Content: View {
         NavigationStack(path: $router.navPath) {
             rootView
         }
-        .environmentObject(router)
+        .environment(router)
         .gesture(navSwipeBackGesture)
     }
     
