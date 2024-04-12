@@ -38,23 +38,8 @@ public struct NavigationRouter<Content>: View where Content: View {
     
     public var body: some View {
         NavigationStack(path: $router.navPath) {
-            rootView
+            root()
         }
         .environment(router)
-        .gesture(navSwipeBackGesture)
-    }
-    
-    private var rootView: some View {
-        root()
-            .navigationBarBackButtonHidden(true)
-    }
-    
-    private var navSwipeBackGesture: some Gesture {
-        DragGesture(minimumDistance: 50)
-            .onEnded { val in
-                if val.translation.width > 50 && val.startLocation.x < 50 {
-                    router.safePop()
-                }
-            }
     }
 }

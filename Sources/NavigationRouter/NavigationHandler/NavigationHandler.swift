@@ -11,8 +11,8 @@ import SwiftUI
 @Observable
 final public class NavigationHandler {
     
-    /// A `SwiftUI.NavigationPath` used to handle navigation for `SwiftUI`.
-    internal var navPath = NavigationPath()
+    /// The internal implementation of the `SwiftUI.NavigationPath` used to control navigation in `SwiftUI`.
+    private var _navPath = NavigationPath()
     
     /// An `Array<NavigationLocation>`, used to handle advanced navigation operations.
     private var routerPath = [any NavigationLocation]()
@@ -39,6 +39,18 @@ public extension NavigationHandler {
     
     /// An `Array<NavigationLocation>` containing all locations inside the current navigation route.
     var pathHistory: [any NavigationLocation] { routerPath }
+    
+    /// A `SwiftUI.NavigationPath` used to handle navigation for `SwiftUI`.
+    internal var navPath: NavigationPath {
+        get { _navPath }
+        set {
+            assert(newValue.count <= _navPath.count, "Unexpected value inserted into NavigationHandler.navPath. Use the NavigationHandler.push method to navigate forward.")
+            guard !popDisabled else { return }
+            
+            _navPath = newValue
+            routerPath = routerPath.dropLast(routerPath.count - newValue.count)
+        }
+    }
 }
 
 // MARK: Pushing
@@ -52,7 +64,7 @@ public extension NavigationHandler {
     ///
     func push<Content: View>(_ view: Content, with data: [String : Any] = [:]) {
         let location = NavLocation(view: view, userData: data)
-        navPath.append(location)
+        _navPath.append(location)
         routerPath.append(location)
         disablePop()
     }
@@ -68,7 +80,7 @@ public extension NavigationHandler {
     ///
     func pop(_ amount: Int = 1) {
         guard !popDisabled else { return }
-        navPath.removeLast(amount)
+        _navPath.removeLast(amount)
         routerPath.removeLast(amount)
         disablePop()
     }
@@ -128,7 +140,7 @@ public extension NavigationHandler {
     /// Removes all `Views` in the current navigation route and returns to the root `View`.
     func popToRoot() {
         guard !popDisabled else { return }
-        navPath = NavigationPath()
+        _navPath = NavigationPath()
         routerPath = []
         disablePop()
     }
