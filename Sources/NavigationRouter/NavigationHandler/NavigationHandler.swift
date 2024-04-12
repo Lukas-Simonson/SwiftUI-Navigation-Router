@@ -8,14 +8,13 @@
 import SwiftUI
 
 /// `NavigationHandler` is a class used to handle all Navigation for a `NavigationRouter`.
-@Observable
-final public class NavigationHandler {
+final public class NavigationHandler: ObservableObject {
     
     /// The internal implementation of the `SwiftUI.NavigationPath` used to control navigation in `SwiftUI`.
-    private var _navPath = NavigationPath()
+    @Published private var _navPath = NavigationPath()
     
     /// An `Array<NavigationLocation>`, used to handle advanced navigation operations.
-    private var routerPath = [any NavigationLocation]()
+    @Published private var routerPath = [any NavigationLocation]()
     
     public init() {}
     
