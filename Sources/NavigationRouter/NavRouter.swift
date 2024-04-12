@@ -11,7 +11,7 @@ import SwiftUI
 @propertyWrapper public struct NavRouter: DynamicProperty {
     
     /// The `NavigationHandler` recieved from a `NavigationRouter`
-    @EnvironmentObject public var router: NavigationHandler
+    @Environment(NavigationHandler.self) private var router: NavigationHandler
     
     public init() {}
     

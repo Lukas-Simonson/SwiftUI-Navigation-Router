@@ -1,6 +1,5 @@
 # NavigationRouter
-An alternative for SwiftUI NavigationStack. While using the NavigationStack for performance, NavigationRouter gives more control to navigating. It also gives easy access for programatic navigation. NavigationRouter is type-safe and avoids using AnyView to make it as performant as possible. 
-
+An alternative for SwiftUI NavigationStack. While using the NavigationStack for performance, NavigationRouter gives more control to navigating. It also gives easy access for programatic navigation. NavigationRouter is type-safe and avoids using AnyView to make it as performant as possible.
 ## Installation
 
 ### Swift Package Manager
@@ -39,37 +38,29 @@ struct RootView: View {
 
 ### Adding Navigatable Views
 
-In order to navigate to different views the `NavigationRouter` needs to know what Views are navigatable to. You can do this easily enough using the `navigatesTo` ViewModifier. You can either add them all to your root view, or specify them along the route. Here is a demonstration of the former.
+In order to navigate to different views, the `NavigationRouter` needs to know what Views are navigable to. You can do this easily enough using the `routerDestinations` `ViewModifier`. You can either add them all to your root view, or specify them along the route. Here is a demonstration of the former.
 
 ```swift
 struct RootView: View {
     var body: some View {
         NavigationRouter {
             HomeView()
-                .navigatesTo(ViewTwo.self)
-                .navigatesTo(ViewThree.self)
-                .navigatesTo(ViewFour.self)
+                .routerDestinations(ViewTwo.self, ViewThree.self)
+                .routerDestinations(ViewFour.self)
         }
     }
 }
 ```
-By default all Views, excluding the root view, have a back button in the top-leading location of the Navigation Tool Bar. If you have a custom back navigation button, you can disable this button using a parameter on the `navigatesTo` ViewModifier. Like so:
-
-```swift
-// Inside a NavigationRouter...
-HomeView()
-    .navigatesTo(ViewTwo.self, usesBackButton: false)
-```
-
 ### Navigating Forward / Pushing Views
 
-Once you have added the `NavigationRouter` and added your `Navigatable Views`. You can start to navigate. Navigation Forwards / Pushing a View is super easy! You can either use a `PushView`, or gain access to the `Router` using the `@NavRouter` property wrapper, and then call the `push` function.
+Once you have added the `NavigationRouter` and added your `Navigable Views`. You can start to navigate. Navigating Forwards / Pushing a View is super easy! You can either use a `PushView`, or gain access to the `Router` using the `@NavRouter` property wrapper, and then call the `push` function.
 
-#### Using PushView
+#### Using `PushView`
 
-Using a `PushView` is the easiest way to navigate forward. Inside any file that you need to navigate in import `NavigationRouter`, and then its as easy as using a `NavigationLink`. `PushView` can be made either with a `String`, or a custom label `View`.
+Using a `PushView` is the easiest way to navigate forward. Inside any file that you need to navigate in, import `NavigationRouter`, and then it's as easy as using a `NavigationLink`. `PushView` can be made either with a `String`, or a custom label `View`.
 
 <sub>NOTE: `PushView` functions as a `Button` similar to `NavigationLink`</sub>
+<sub>NOTE: `PushView` is a replacement to `NavigationLink`, using a `NavigationLink` within a `NavigationRouter` will lead to an assertion failure</sub>
 
 ```swift
 struct ViewOne: View {

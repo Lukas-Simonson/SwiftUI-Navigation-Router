@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@available(*, deprecated, message: "Switch to using the new routerDestination API")
 public extension View {
     
     /// Adds a `View` `Type` that can be navigated to into the current navigation route.
