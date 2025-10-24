@@ -22,7 +22,7 @@ public protocol NavigationLocation: Hashable, Identifiable {
 }
 
 public extension NavigationLocation {
-    static func ==(_ lhs: any NavigationLocation, _ rhs: any NavigationLocation) -> Bool {
+    static func ==(_ lhs: Self, _ rhs: any NavigationLocation) -> Bool {
         lhs.id == rhs.id
     }
     
